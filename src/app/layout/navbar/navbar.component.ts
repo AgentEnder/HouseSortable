@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
     selector: 'app-navbar',
@@ -8,7 +9,7 @@ export class NavbarComponent {
     @Output() public navToggle = new EventEmitter<void>();
     user: any;
 
-    constructor() {
+    constructor(public auth: AuthService) {
     }
 
     getName(){

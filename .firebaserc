@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "housesortable"
+  },
+  "targets": {
+    "housesortable": {
+      "hosting": {
+        "HouseSortable": [
+          "housesortable"
+        ]
+      }
+    }
+  }
+}
