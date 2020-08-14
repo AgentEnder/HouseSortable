@@ -1,4 +1,4 @@
-<mat-card class="mat-elevation-z4 m-4">
+<mat-card class="mat-elevation-z4 m-4" *ngIf="!placeholder; else placeholderTemplate">
     <mat-card-title-group>
         <mat-card-title>{{house.address}}</mat-card-title>
         <mat-card-subtitle>{{house.cityZip}}</mat-card-subtitle>
@@ -6,3 +6,13 @@
     </mat-card-title-group>
     <h4>${{house.price}}</h4> <a [href]="house.link">HAR Link</a>
 </mat-card>
+<ng-template #placeholderTemplate>
+    <mat-card class="mat-elevation-z4 m-4">
+        <mat-card-title-group>
+            <mat-card-title class="d-flex align-items-center"><mat-icon [matTooltip]="'This is a placeholder until you add your own houses'" class="mr-auto" >help</mat-icon>123 Lois Ln</mat-card-title>
+            <mat-card-subtitle>Superhero City, 12345</mat-card-subtitle>
+            <img mat-card-md-image [src]="getRandomImgSrc()"/>
+        </mat-card-title-group>
+        <h4>$1,000,000</h4> <a>HAR Link</a>
+    </mat-card>
+</ng-template>

@@ -1,4 +1,4 @@
-<mat-sidenav-container class="example-container">
+<mat-sidenav-container style="position: absolute; bottom: 0; left: 0; right: 0" [style.top]="topGap + 'px'">
   <mat-sidenav #sidenav [mode]="mode" [opened]="show" [fixedInViewport]="true" [fixedTopGap]="topGap" >
     <mat-nav-list *ngFor="let route of routes">
         <ng-container *ngIf="route.children && route.children.length; else singleItemTemplate">
