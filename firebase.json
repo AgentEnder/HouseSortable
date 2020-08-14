@@ -5,20 +5,6 @@
   },
   "hosting": [
     {
-      "public": "dist/HouseSortable",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
       "target": "HouseSortable",
       "public": "dist/HouseSortable",
       "ignore": [
