@@ -1,0 +1,47 @@
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav [mode]="mode" [opened]="show" [fixedInViewport]="true" [fixedTopGap]="topGap" >
+    <mat-nav-list *ngFor="let route of routes">
+        <ng-container *ngIf="route.children && route.children.length; else singleItemTemplate">
+            <mat-expansion-panel 
+                class="nav-section" 
+                [routerLinkActive]="'header-active'" 
+                [hideToggle]="false"
+                #rla="routerLinkActive"
+                [expanded]="rla.isActive"
+                >
+                <mat-expansion-panel-header>
+                    <div class="category-header">
+                        <mat-icon matListIcon>{{route.icon}}</mat-icon> 
+                        <div class="mx-2">{{ route.label }}</div> 
+                    </div>
+                </mat-expansion-panel-header>
+                <ng-container *ngFor="let child of route.children">
+                    <a mat-list-item [routerLink]="[child.path]" [routerLinkActive]="'active'" #childRouteActive="routerLinkActive"> 
+                        <mat-icon matListIcon>{{child.icon}}</mat-icon> 
+                        <span class="mx-2">{{ child.label }}</span> 
+                    </a>
+                </ng-container>
+            </mat-expansion-panel>
+        </ng-container>
+
+        <ng-template #singleItemTemplate>
+            <a mat-list-item [routerLink]="[route.path]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{ exact: true }" > 
+                <mat-icon matListIcon>{{route.icon}}</mat-icon> 
+                <span class="mx-2">{{ route.label }}</span> 
+            </a>
+        </ng-template>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="px-5 pt-2">
+        <ng-content></ng-content>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<ng-template #renderSidebarLink let-link>
+    <a mat-list-item [routerLink]="[link.path]" [routerLinkActive]="'active'"> 
+        <mat-icon matListIcon>{{link.icon}}</mat-icon> 
+        <span class="mx-2">{{ link.label }}</span> 
+    </a>
+</ng-template>

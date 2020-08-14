@@ -1,0 +1,20 @@
+<mat-toolbar color="primary" class="position-sticky">
+  <button
+    mat-icon-button
+    class="example-icon mr-2"
+    aria-label="Example icon-button with menu icon"
+  >
+    <mat-icon (click)="navToggle.emit()">menu</mat-icon>
+  </button>
+  <span class="mr-auto">HouseSort</span>
+  <span class="mx-3">{{getName()}}</span>
+  <button
+    mat-icon-button
+    class="example-icon mr-3"
+    aria-label="Example icon-button with share icon"
+  >
+    <mat-icon>share</mat-icon>
+  </button>
+  <button mat-raised-button *ngIf="true">Log In!</button>
+  <!-- <button mat-raised-button *ngIf="auth.loggedIn">Log Out</button> -->
+</mat-toolbar>

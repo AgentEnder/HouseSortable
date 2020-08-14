@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div cdkDropList (cdkDropListDropped)="drop($event)">
+        <div *ngFor="let dataItem of models" cdkDrag>
+          <app-sortable-row [house]="dataItem"></app-sortable-row>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 d-flex flex-row justify-content-center">
+      <div class="floating-menu">
+        <mat-form-field>
+          <mat-label>Address</mat-label>
+          <input matInput [(ngModel)]="newModel.address" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>City + Zip</mat-label>
+          <input matInput [(ngModel)]="newModel.cityZip" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Image URL</mat-label>
+          <input matInput [(ngModel)]="newModel.image" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Asking Price</mat-label>
+          <input matInput [(ngModel)]="newModel.price" type="number" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>HAR Link</mat-label>
+          <input matInput [(ngModel)]="newModel.link" />
+        </mat-form-field>
+        <button mat-raised-button [color]="'primary'" (click)="addModel()">
+          Add House
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-menu #aboveMenu="matMenu" yPosition="above">
+    <button mat-menu-item (click)="fileInput.click()">Import</button>
+    <input
+          type="file"
+          class="d-none"
+          #fileInput
+          (change)="import($event)"
+          accept=".ehf,.json"
+        />
+    <button mat-menu-item (click)="export()">Export</button>
+</mat-menu>
+<button mat-fab class="fab-menu" [matMenuTriggerFor]="aboveMenu">
+  <mat-icon>list</mat-icon>
+</button>

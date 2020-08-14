@@ -1,0 +1,54 @@
+// layout
+.main-wrapper{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    app-navbar{
+        position: sticky;
+        z-index: 1000;
+        top: 0;
+    }
+
+    app-sidebar{
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    
+        mat-sidenav-container{
+            flex-grow: 1;
+        }
+    }
+}
+
+mat-sidenav {
+    mat-nav-list{
+        min-width: 200px;
+    }
+}
+
+a.mat-list-item.active {
+    border-left: 4px solid $primary;
+    background-color: $primary-transparent;
+}
+
+.nav-section {
+    .mat-expansion-panel-body {
+        padding: 0;
+    }
+}
+
+app-sidebar {
+    .mat-nav-list{
+        padding-top: 0;
+    }
+
+    .mat-expansion-panel{
+        border-radius: 0;
+    }
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+}
