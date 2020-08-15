@@ -1,16 +1,53 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
-import { HouseModel } from '../core/models/house-model';
+import { MatDialog } from '@angular/material/dialog';
+
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import { xkcdPassphrase } from 'xkcd-passphrase';
+
+import { HouseList, HouseModel } from '../core/models/house-model';
+import { User } from '../core/models/user-model';
+import { AuthService } from '../core/services/auth.service';
+import { HouseListService } from '../core/services/house-list.service';
+import { LoadDialogComponent } from './components/load-dialog/load-dialog.component';
+import { SaveDialogComponent } from './components/save-dialog/save-dialog.component';
 
 @Component({
     templateUrl: './house-list.component.html'
 })
-export class HouseListComponent {
+export class HouseListComponent implements OnInit, OnDestroy {
     models: HouseModel[] = [];
     newModel: HouseModel = {} as HouseModel;
+    houseList: HouseList = {
+        createdAt: moment.utc().toISOString(),
+        data: this.models,
+        modifiedAt: moment.utc().toISOString(),
+        name: null,
+        public: false
+    };
 
     @ViewChild('FileInput') fileInput: Element;
+
+    user: User;
+    userSubscription: Subscription;
+
+    constructor(
+        private houseListService: HouseListService,
+        private auth: AuthService,
+        private dialogService: MatDialog
+    ) {
+        this.userSubscription = this.auth.user$.subscribe(x => this.user = x );
+    }
+
+    async ngOnInit(): Promise<void> {
+        this.houseList.name = await xkcdPassphrase.generateWithWordCount(4);
+    }
+
+    ngOnDestroy(): void {
+        this.userSubscription.unsubscribe();
+    }
 
     addModel(): void {
         this.models.push(this.newModel);
@@ -25,6 +62,10 @@ export class HouseListComponent {
         const element = arr[fromIndex];
         arr.splice(fromIndex, 1);
         arr.splice(toIndex, 0, element);
+    }
+
+    removeItemInArray(arr, fromIndex): void {
+        arr.splice(fromIndex, 1);
     }
 
     async import(event: InputEvent & { target: { files: FileList } }): Promise<void> {
@@ -57,5 +98,20 @@ export class HouseListComponent {
             out[i] = s.charCodeAt(i);
         }
         return new Uint8Array(out);
+    }
+
+    save(): void {
+        this.dialogService.open(SaveDialogComponent, {data: this.houseList}).afterClosed().subscribe(x => {
+
+        });
+    }
+
+    load(): void {
+        this.dialogService.open(LoadDialogComponent).afterClosed().subscribe((x: HouseList) => {
+            if (typeof(x) === 'object' && 'name' in x) {
+                this.houseList = x;
+                this.models = x.data;
+            }
+        });
     }
 }

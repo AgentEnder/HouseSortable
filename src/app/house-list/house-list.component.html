@@ -1,9 +1,16 @@
-<div class="container" style="overflow: visible;">
+<div class="container mt-0" style="overflow: visible;">
   <div class="row">
     <div class="col">
       <div cdkDropList (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let dataItem of models" cdkDrag>
-          <app-sortable-row [house]="dataItem"></app-sortable-row>
+        <div *ngFor="let dataItem of models; let index=index" cdkDrag>
+          <app-sortable-row 
+            [house]="dataItem" 
+            [showUpArrow]="index > 0" 
+            [showDownArrow]="index < models.length - 1"
+            (moveUp)="moveItemInArray(models, index, index-1)"
+            (moveDown)="moveItemInArray(models, index, index+1)"
+            (remove)="removeItemInArray(models, index)"
+          ></app-sortable-row>
         </div>
       </div>
       <ng-container *ngIf="models.length < 3">
@@ -42,7 +49,7 @@
   </div>
 </div>
 <mat-menu #aboveMenu="matMenu" yPosition="above">
-    <button mat-menu-item (click)="fileInput.click()">Import</button>
+    <button mat-menu-item (click)="fileInput.click()"><mat-icon>folder_open</mat-icon>Import</button>
     <input
           type="file"
           class="d-none"
@@ -50,7 +57,9 @@
           (change)="import($event)"
           accept=".ehf,.json"
         />
-    <button mat-menu-item (click)="export()">Export</button>
+    <button mat-menu-item (click)="export()"><mat-icon>save</mat-icon>Export</button>
+    <button mat-menu-item (click)="save()"><mat-icon>cloud_upload</mat-icon>Save</button>
+    <button mat-menu-item (click)="load()"><mat-icon>cloud_download</mat-icon>Load</button>
 </mat-menu>
 <button mat-fab class="fab-menu" [matMenuTriggerFor]="aboveMenu">
   <mat-icon>list</mat-icon>

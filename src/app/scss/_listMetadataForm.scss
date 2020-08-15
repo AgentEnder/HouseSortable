@@ -1,0 +1,14 @@
+@use './variables';
+@use './elevation';
+
+.list-metadata-form {
+    @extend .elevation-5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 16px;
+    height: fit-content;
+}

@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Save List</h2>
+<div mat-dialog-content class="d-flex flex-column">
+    <mat-form-field>
+      <mat-label>List Name</mat-label>
+      <input
+        matInput
+        [(ngModel)]="houseList.name"
+        (ngModelChange)="generatePublicUrl()"
+        (click)="$event.target.select()"
+      />
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]="houseList.public" class=""
+      >Public</mat-checkbox
+    >
+    <div class="d-flex" *ngIf="saved">
+        <mat-form-field class="flex-grow-1">
+          <mat-label>Public URL</mat-label>
+          <input matInput disabled [(ngModel)]="houseList.publicUrl" />
+        </mat-form-field>
+        <button mat-icon-button 
+                [cdkCopyToClipboard]="houseList.publicUrl" 
+                [matTooltip]="'Copied!'" 
+                [matTooltipShowDelay]="10000000000000"
+                [matTooltipHideDelay]="10000000000000"
+                #tt="matTooltip"
+                (click)="tt.show(0)"
+        >
+            <mat-icon>content_copy</mat-icon>
+        </button>
+    </div>
+</div>
+<mat-dialog-actions>
+    <ng-container *ngIf="!saved; else savedActions">
+        <button mat-raised-button mat-dialog-close>Cancel</button>
+        <button mat-raised-button class="ml-2" (click)="save()" [color]="'primary'">Save</button>
+    </ng-container>
+    <ng-template #savedActions>
+        <button mat-raised-button mat-dialog-close>Close</button>
+    </ng-template>
+</mat-dialog-actions>

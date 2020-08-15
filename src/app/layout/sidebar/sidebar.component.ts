@@ -22,8 +22,13 @@ export class SidebarComponent {
         },
         {
             path: '/list',
-            icon: 'business_center',
+            icon: 'list_alt',
             label: 'Home List'
+        },
+        {
+            path: '/visited',
+            icon: 'tour',
+            label: 'Visited'
         }
     ];
 

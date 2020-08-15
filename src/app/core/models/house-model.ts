@@ -5,3 +5,12 @@ export interface HouseModel {
     image: string;
     price: number;
 }
+
+export interface HouseList{
+    data: HouseModel[];
+    name: string;
+    modifiedAt: string;
+    createdAt: string;
+    public: boolean;
+    publicUrl?: string;
+}

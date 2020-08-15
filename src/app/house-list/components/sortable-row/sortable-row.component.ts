@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { HouseModel } from '../../core/models/house-model';
+import { HouseModel } from '../../../core/models/house-model';
 
 @Component({
     templateUrl: './sortable-row.component.html',
@@ -7,9 +7,12 @@ import { HouseModel } from '../../core/models/house-model';
 })
 export class SortableRowComponent implements OnInit {
     @Input() house: HouseModel;
-    @Input() placeholder: boolean = false;
+    @Input() placeholder = false;
+    @Input() showUpArrow: boolean;
+    @Input() showDownArrow: boolean;
     @Output() moveUp = new EventEmitter<null>();
     @Output() moveDown = new EventEmitter<null>();
+    @Output() remove = new EventEmitter<null>();
     imgSeed: number;
 
     ngOnInit(): void {
