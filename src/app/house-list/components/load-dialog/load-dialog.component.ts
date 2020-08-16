@@ -26,7 +26,14 @@ export class LoadDialogComponent {
 
     name = (list: HouseList) => list && list.name;
 
-    choiceIsValid(){
+    choiceIsValid(): boolean{
         return this.selectedList && typeof(this.selectedList) !== 'string' && 'name' in this.selectedList;
+    }
+
+    deleteItem(): void {
+        this.houseListService.deleteList(this.selectedList);
+        this.options = this.options.filter( x => x !== this.selectedList);
+        this.filter('');
+        this.selectedList = null;
     }
 }

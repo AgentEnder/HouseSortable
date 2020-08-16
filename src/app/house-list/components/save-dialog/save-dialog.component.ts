@@ -43,9 +43,9 @@ export class SaveDialogComponent implements OnDestroy {
     }
 
     save(): void {
-        this.houseListService.saveList(this.houseList).subscribe( x => {
+        this.houseListService.saveList(this.houseList).then( x => {
             console.log(x);
             this.saved = true;
         });
     }
-};
+}

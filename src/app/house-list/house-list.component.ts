@@ -21,9 +21,9 @@ export class HouseListComponent implements OnInit, OnDestroy {
     models: HouseModel[] = [];
     newModel: HouseModel = {} as HouseModel;
     houseList: HouseList = {
-        createdAt: moment.utc().toISOString(),
+        createdAt: null,
         data: this.models,
-        modifiedAt: moment.utc().toISOString(),
+        modifiedAt: null,
         name: null,
         public: false
     };
@@ -107,11 +107,15 @@ export class HouseListComponent implements OnInit, OnDestroy {
     }
 
     load(): void {
-        this.dialogService.open(LoadDialogComponent).afterClosed().subscribe((x: HouseList) => {
+        this.dialogService.open(LoadDialogComponent, {width: '50vw'}).afterClosed().subscribe((x: HouseList) => {
             if (typeof(x) === 'object' && 'name' in x) {
                 this.houseList = x;
                 this.models = x.data;
             }
         });
+    }
+
+    deleteCloudSave(): void {
+        this.houseListService.deleteList(this.houseList);
     }
 }

@@ -8,6 +8,7 @@ import { HouseList } from '../models/house-model';
 
 import { switchMap, take, map } from 'rxjs/operators';
 import { User } from '../models/user-model';
+import * as moment from 'moment';
 
 @Injectable()
 export class HouseListService {
@@ -38,12 +39,25 @@ export class HouseListService {
         );
     }
 
-    saveList(list: HouseList): Observable<AngularFirestoreDocument<HouseList>> {
+    deleteList(houseList): void {
+        if (this.loggedInUser) {
+            const docRef: AngularFirestoreDocument<HouseList> =
+                this.firestore.doc(`users/${this.loggedInUser.uid}/houseLists/${houseList.name}`);
+            docRef.delete();
+        } else {
+            throw new Error('You must be logged in to delete a collection!');
+        }
+    }
+
+    async saveList(list: HouseList): Promise<HouseList> {
         if (this.loggedInUser) {
             const docRef: AngularFirestoreDocument<HouseList> =
                 this.firestore.doc(`users/${this.loggedInUser.uid}/houseLists/${list.name}`);
+            const existing = await docRef.get().toPromise();
+            list.createdAt = existing.exists ? existing.data().createdAt : moment.utc().toISOString();
+            list.modifiedAt = moment.utc().toISOString();
             docRef.set(list);
-            return of(docRef);
+            return list;
         } else {
             throw new Error('You must be logged in to save a collection!');
         }

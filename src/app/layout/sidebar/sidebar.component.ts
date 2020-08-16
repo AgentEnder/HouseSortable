@@ -32,7 +32,7 @@ export class SidebarComponent {
         }
     ];
 
-    public toggleSidenav(){
+    public toggleSidenav(): void {
         this.show = !this.show;
     }
 

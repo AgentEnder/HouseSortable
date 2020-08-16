@@ -12,8 +12,8 @@
     <div>
       <mat-card-title>{{ house.address }}</mat-card-title>
       <mat-card-subtitle>{{ house.cityZip }}</mat-card-subtitle>
-      <h4>${{ house.price }}</h4>
-      <a [href]="house.link">HAR Link</a>
+      <h4>{{ house.price| currency: 'USD' }}</h4>
+      <a [href]="house.link" target="_blank" rel="noopener">HAR Link</a>
     </div>
     <img mat-card-md-image [src]="house.image" class="ml-auto" />
   </div>

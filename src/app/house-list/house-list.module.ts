@@ -29,7 +29,7 @@ import { HouseListComponent } from './house-list.component';
 const routes: Routes = [{
     path: '',
     component: HouseListComponent
-}]
+}];
 
 @NgModule({
   declarations: [

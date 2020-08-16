@@ -1,10 +1,11 @@
 <h2 mat-dialog-title>Load List</h2>
-<div mat-dialog-content class="d-flex flex-column">
-    <mat-form-field class="example-full-width">
+<div mat-dialog-content class="d-flex flex-column w-100">
+    <mat-form-field class="w-100">
         <input type="text"
                placeholder="Pick one"
                aria-label="Number"
                matInput
+               class="w-100 lg-auto"
                [(ngModel)]="selectedList"
                (ngModelChange)="filter($event)"
                [matAutocomplete]="auto"
@@ -17,5 +18,7 @@
       </mat-form-field>
 </div>
 <mat-dialog-actions>
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="warn" class="mr-auto" (click)="deleteItem()">Delete</button>
     <button mat-raised-button color="primary" [disabled]="!choiceIsValid()" [mat-dialog-close]="selectedList">Load</button>
 </mat-dialog-actions>

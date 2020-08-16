@@ -13,7 +13,7 @@
           ></app-sortable-row>
         </div>
       </div>
-      <ng-container *ngIf="models.length < 3">
+      <ng-container *ngIf="!models || !models.length">
           <div *ngFor="let placeholderIdx of [].constructor(3-models.length)">
             <app-sortable-row [placeholder]="true"></app-sortable-row>
           </div>
@@ -58,6 +58,8 @@
           accept=".ehf,.json"
         />
     <button mat-menu-item (click)="export()"><mat-icon>save</mat-icon>Export</button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item *ngIf="this.houseList.createdAt" (click)="deleteCloudSave()"><mat-icon>delete_sweep</mat-icon>Delete</button>
     <button mat-menu-item (click)="save()"><mat-icon>cloud_upload</mat-icon>Save</button>
     <button mat-menu-item (click)="load()"><mat-icon>cloud_download</mat-icon>Load</button>
 </mat-menu>
