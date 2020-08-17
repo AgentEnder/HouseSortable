@@ -10,7 +10,7 @@
     </div>
     <mat-divider [vertical]="true" class="ml-2 mr-4" *ngIf="editable"></mat-divider>
     <div class="d-flex flex-column flex-grow-1">
-      <div class="d-flex flex-grow-1">
+      <div class="d-flex flex-grow-1 flex-wrap">
         <div class="d-flex flex-column flex-grow-1">
           <mat-card-title>{{ house.address }}</mat-card-title>
           <mat-card-subtitle>{{ house.cityZip }}</mat-card-subtitle>
@@ -18,7 +18,7 @@
           <mat-checkbox [(ngModel)]="house.visited" [disabled]="!editable">Visited</mat-checkbox>
           <a [href]="house.link" target="_blank" rel="noopener">HAR Link</a>
         </div>
-          <img [src]="house.image" class="" style="max-height: 128px;"/>
+          <img [src]="house.image" class="mw-100" style="max-height: 128px;"/>
       </div>
       <mat-expansion-panel class="mt-2">
         <mat-expansion-panel-header>
