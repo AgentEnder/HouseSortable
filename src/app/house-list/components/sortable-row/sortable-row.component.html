@@ -3,19 +3,46 @@
   *ngIf="!placeholder; else placeholderTemplate"
 >
   <div class="d-flex flex-wrap">
-    <div class="actions d-flex flex-column justify-content-around">
+    <div class="actions d-flex flex-column align-items-center justify-content-around" *ngIf="editable">
       <button mat-icon-button (click)="moveUp.emit()" *ngIf="showUpArrow"><mat-icon>arrow_upward</mat-icon></button>
       <button mat-icon-button (click)="remove.emit()"><mat-icon>remove</mat-icon></button>
       <button mat-icon-button (click)="moveDown.emit()" *ngIf="showDownArrow"><mat-icon>arrow_downward</mat-icon></button>
     </div>
-    <mat-divider [vertical]="true" class="ml-2 mr-4"></mat-divider>
-    <div>
-      <mat-card-title>{{ house.address }}</mat-card-title>
-      <mat-card-subtitle>{{ house.cityZip }}</mat-card-subtitle>
-      <h4>{{ house.price| currency: 'USD' }}</h4>
-      <a [href]="house.link" target="_blank" rel="noopener">HAR Link</a>
+    <mat-divider [vertical]="true" class="ml-2 mr-4" *ngIf="editable"></mat-divider>
+    <div class="d-flex flex-column flex-grow-1">
+      <div class="d-flex flex-grow-1">
+        <div class="d-flex flex-column flex-grow-1">
+          <mat-card-title>{{ house.address }}</mat-card-title>
+          <mat-card-subtitle>{{ house.cityZip }}</mat-card-subtitle>
+          <h4>{{ house.price| currency: 'USD' }}</h4>
+          <mat-checkbox [(ngModel)]="house.visited" [disabled]="!editable">Visited</mat-checkbox>
+          <a [href]="house.link" target="_blank" rel="noopener">HAR Link</a>
+        </div>
+          <img [src]="house.image" class="" style="max-height: 128px;"/>
+      </div>
+      <mat-expansion-panel class="mt-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Pros + Cons</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-divider></mat-divider>
+        <div class="d-flex flex-wrap mt-4">
+          <div class="flex-grow-1 d-flex flex-column mx-2">
+            <div class="h3 d-flex align-items-center">Pros <button mat-icon-button (click)="addPro()" *ngIf="editable"><mat-icon>add</mat-icon></button></div>
+            <div class="drag-list" cdkDropList [cdkDropListDisabled]="!editable">
+              <div *ngFor="let pro of house.pros; let i=index" class="drag-box" cdkDrag [cdkDragDisabled]="!editable">
+              </div>
+            </div>
+          </div>
+          <div class="flex-grow-1 d-flex flex-column mx-2">
+            <div class="h3">Cons</div>
+            <div class="drag-list" cdkDropList [cdkDropListDisabled]="!editable">
+              <div *ngFor="let con of house.cons; let i=index" class="drag-box" cdkDrag [cdkDragDisabled]="!editable">
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
     </div>
-    <img mat-card-md-image [src]="house.image" class="ml-auto" />
   </div>
 </mat-card>
 <ng-template #placeholderTemplate>

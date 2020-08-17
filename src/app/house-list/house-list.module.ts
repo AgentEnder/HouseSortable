@@ -12,13 +12,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { SortableModule } from '@progress/kendo-angular-sortable';
+import { ContenteditableModule } from '@ng-stack/contenteditable';
 
 import { HouseListService } from '../core/services/house-list.service';
 import { LoadDialogComponent } from './components/load-dialog/load-dialog.component';
@@ -42,7 +43,7 @@ const routes: Routes = [{
     CommonModule,
     RouterModule.forChild(routes),
     FormsModule,
-    SortableModule,
+    ContenteditableModule,
     ClipboardModule,
     MatCardModule,
     MatInputModule,
@@ -53,6 +54,7 @@ const routes: Routes = [{
     MatAutocompleteModule,
     MatButtonModule,
     MatMenuModule,
+    MatExpansionModule,
     MatFormFieldModule,
     DragDropModule,
     MatDialogModule

@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin, zip } from 'rxjs';
 import { xkcdPassphrase } from 'xkcd-passphrase';
 
 import { HouseList, HouseModel } from '../core/models/house-model';
@@ -13,6 +13,8 @@ import { AuthService } from '../core/services/auth.service';
 import { HouseListService } from '../core/services/house-list.service';
 import { LoadDialogComponent } from './components/load-dialog/load-dialog.component';
 import { SaveDialogComponent } from './components/save-dialog/save-dialog.component';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Component({
     templateUrl: './house-list.component.html'
@@ -30,15 +32,36 @@ export class HouseListComponent implements OnInit, OnDestroy {
 
     @ViewChild('FileInput') fileInput: Element;
 
+    editable = false;
+
     user: User;
-    userSubscription: Subscription;
+    subscription: Subscription;
 
     constructor(
         private houseListService: HouseListService,
         private auth: AuthService,
-        private dialogService: MatDialog
+        private dialogService: MatDialog,
+        private activatedRoute: ActivatedRoute
     ) {
-        this.userSubscription = this.auth.user$.subscribe(x => this.user = x );
+        zip(this.auth.user$, activatedRoute.queryParamMap).pipe(
+            map(
+                ([user, paramMap]) => ({user, paramMap})
+            )
+        ).subscribe(next => {
+            this.user = next.user;
+            const uid = next.paramMap.get('uid') || this.user.uid;
+            this.editable = uid === null || (this.user && uid === this.user.uid);
+            const listName = next.paramMap.get('houseList');
+            if (listName && listName !== '') {
+                this.houseListService.getList(uid, decodeURIComponent(listName)).subscribe(x => {
+                    if (x) {
+                        this.houseList = x;
+                        this.models = x.data;
+                    }
+                });
+            }
+        });
+        this.subscription = this.auth.user$.subscribe(x => this.user = x );
     }
 
     async ngOnInit(): Promise<void> {
@@ -46,7 +69,7 @@ export class HouseListComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.userSubscription.unsubscribe();
+        this.subscription.unsubscribe();
     }
 
     addModel(): void {

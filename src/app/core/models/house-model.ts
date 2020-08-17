@@ -4,6 +4,9 @@ export interface HouseModel {
     link: string;
     image: string;
     price: number;
+    pros?: string[];
+    cons?: string[];
+    visited?: boolean;
 }
 
 export interface HouseList{

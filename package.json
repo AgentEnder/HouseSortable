@@ -30,6 +30,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-brands-svg-icons": "^5.14.0",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
+    "@ng-stack/contenteditable": "^1.0.1",
     "@progress/kendo-angular-common": "^1.0.0",
     "@progress/kendo-angular-l10n": "^2.0.0",
     "@progress/kendo-angular-sortable": "^3.0.4",

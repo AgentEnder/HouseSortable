@@ -10,6 +10,7 @@ export class SortableRowComponent implements OnInit {
     @Input() placeholder = false;
     @Input() showUpArrow: boolean;
     @Input() showDownArrow: boolean;
+    @Input() editable: boolean;
     @Output() moveUp = new EventEmitter<null>();
     @Output() moveDown = new EventEmitter<null>();
     @Output() remove = new EventEmitter<null>();
@@ -21,5 +22,13 @@ export class SortableRowComponent implements OnInit {
 
     getRandomImgSrc(): string{
         return `https://picsum.photos/256/256?${this.imgSeed}`;
+    }
+
+    addPro(): void {
+        this.house.pros = [...(this.house.pros || []), 'TEST']
+    }
+
+    addCon(): void {
+        this.house.cons = [...(this.house.cons || []), 'TESt']
     }
 }

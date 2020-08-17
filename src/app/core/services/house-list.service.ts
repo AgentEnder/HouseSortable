@@ -35,7 +35,13 @@ export class HouseListService {
 
     getList(uid, listName): Observable<HouseList> {
         return this.firestore.collection<HouseList[]>(`users/${uid}/houseLists`, ref => ref.where('name', '==', listName)).get().pipe(
-            map(x => x.docs[0].data() as HouseList)
+            map(x => {
+                if (x.docs[0]) {
+                    return x.docs[0].data() as HouseList;
+                } else {
+                    return null;
+                }
+            })
         );
     }
 
