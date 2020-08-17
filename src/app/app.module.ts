@@ -25,6 +25,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ShareDialogComponent } from './core/components/share-dialog/share-dialog.component';
 import { AuthService } from './core/services/auth.service';
+import { LocalStorageService } from './core/services/local-storage.service';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { ShareService } from './core/services/share.service';
@@ -57,7 +58,11 @@ import { ShareService } from './core/services/share.service';
     ShareIconsModule,
     BrowserAnimationsModule
   ],
-  providers: [AuthService, ShareService],
+  providers: [
+    AuthService,
+    ShareService,
+    LocalStorageService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

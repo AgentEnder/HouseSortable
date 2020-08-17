@@ -12,7 +12,7 @@ export const environment = {
     projectId: 'housesortable',
     storageBucket: 'housesortable.appspot.com',
     messagingSenderId: '471547380639',
-    appId: '1:471547380639:web:979e8c96765a547b5273aa',
-    measurementId: 'G-J3MEJG5QJ4'
+    appId: "1:471547380639:web:979e8c96765a547b5273aa",
+    measurementId: "G-J3MEJG5QJ4"
   }
 };

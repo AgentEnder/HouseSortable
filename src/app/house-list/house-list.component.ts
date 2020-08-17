@@ -15,6 +15,8 @@ import { LoadDialogComponent } from './components/load-dialog/load-dialog.compon
 import { SaveDialogComponent } from './components/save-dialog/save-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { LocalStorageService } from '../core/services/local-storage.service';
+import { HouseListModule } from './house-list.module';
 
 @Component({
     templateUrl: './house-list.component.html'
@@ -35,21 +37,24 @@ export class HouseListComponent implements OnInit, OnDestroy {
     editable = false;
 
     user: User;
+    loggedIn;
     subscription: Subscription;
 
     constructor(
         private houseListService: HouseListService,
         private auth: AuthService,
         private dialogService: MatDialog,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private storageService: LocalStorageService
     ) {
-        zip(this.auth.user$, activatedRoute.queryParamMap).pipe(
+        this.subscription = zip(this.auth.user$, activatedRoute.queryParamMap).pipe(
             map(
                 ([user, paramMap]) => ({user, paramMap})
             )
         ).subscribe(next => {
             this.user = next.user;
-            const uid = next.paramMap.get('uid') || this.user.uid;
+            this.loggedIn = next.user !== null;
+            const uid = next.paramMap.get('uid') || (this.user && this.user.uid);
             this.editable = uid === null || (this.user && uid === this.user.uid);
             const listName = next.paramMap.get('houseList');
             if (listName && listName !== '') {
@@ -61,11 +66,14 @@ export class HouseListComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.subscription = this.auth.user$.subscribe(x => this.user = x );
     }
 
     async ngOnInit(): Promise<void> {
-        this.houseList.name = await xkcdPassphrase.generateWithWordCount(4);
+        const cachedObject = this.storageService.retrieveLocalStorage<HouseList>('cachedList');
+        if (cachedObject) {
+            this.houseList = cachedObject;
+            this.models = cachedObject.data;
+        }
     }
 
     ngOnDestroy(): void {
@@ -140,5 +148,10 @@ export class HouseListComponent implements OnInit, OnDestroy {
 
     deleteCloudSave(): void {
         this.houseListService.deleteList(this.houseList);
+    }
+
+    logIn(): void {
+        this.storageService.setLocalStorage('cachedList', this.houseList);
+        this.auth.googleSignIn();
     }
 }

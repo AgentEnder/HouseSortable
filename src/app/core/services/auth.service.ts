@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
-import { auth } from 'firebase';
+import { auth } from 'firebase/app';
 import * as moment from 'moment';
 import { Observable, ObservableInput, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
