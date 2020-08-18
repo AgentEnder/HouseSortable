@@ -1,8 +1,8 @@
 <div class="container mt-0" style="overflow: visible;">
   <div class="row">
     <div class="col">
-      <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!editable">
-        <div *ngFor="let dataItem of models; let index=index" cdkDrag [cdkDragDisabled]="!editable">
+      <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!editable || isMobile">
+        <div *ngFor="let dataItem of models; let index=index" cdkDrag [cdkDragDisabled]="!editable || isMobile">
           <app-sortable-row 
             [house]="dataItem" 
             [showUpArrow]="index > 0" 
@@ -20,7 +20,7 @@
           </div>
       </ng-container>
     </div>
-    <div class="col-3 d-flex flex-row justify-content-center" *ngIf="editable">
+    <div class="col-3 d-flex flex-row justify-content-center" *ngIf="editable && !isMobile">
       <div class="floating-menu">
         <mat-form-field class="w-100">
           <mat-label>Address</mat-label>
@@ -63,8 +63,8 @@
     <button mat-menu-item (click)="export()"><mat-icon>save</mat-icon>Export</button>
     <mat-divider></mat-divider>
     <button mat-menu-item *ngIf="houseList.createdAt && editable" (click)="deleteCloudSave()"><mat-icon>delete_sweep</mat-icon>Delete</button>
-    <button mat-menu-item (click)="loggedIn ? save() : logIn()"><mat-icon>cloud_upload</mat-icon>Save</button>
-    <button mat-menu-item (click)="loggedIn? load() : logIn()"><mat-icon>cloud_download</mat-icon>Load</button>
+    <button mat-menu-item (click)="save()"><mat-icon>cloud_upload</mat-icon>Save</button>
+    <button mat-menu-item (click)="load()"><mat-icon>cloud_download</mat-icon>Load</button>
 </mat-menu>
 <button mat-fab class="fab-menu" [matMenuTriggerFor]="aboveMenu">
   <mat-icon>list</mat-icon>

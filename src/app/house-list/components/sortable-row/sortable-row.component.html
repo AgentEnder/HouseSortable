@@ -2,13 +2,13 @@
   class="mat-elevation-z4 m-4"
   *ngIf="!placeholder; else placeholderTemplate"
 >
-  <div class="d-flex flex-wrap">
-    <div class="actions d-flex flex-column align-items-center justify-content-around" *ngIf="editable">
+  <div class="d-flex flex-wrap" [ngClass]="{'flex-column': isMobile}">
+    <div class="actions d-flex align-items-center justify-content-around" *ngIf="editable" [ngClass]="{'flex-column': !isMobile, 'bottom-border': isMobile}">
       <button mat-icon-button (click)="moveUp.emit()" *ngIf="showUpArrow"><mat-icon>arrow_upward</mat-icon></button>
       <button mat-icon-button (click)="remove.emit()"><mat-icon>remove</mat-icon></button>
       <button mat-icon-button (click)="moveDown.emit()" *ngIf="showDownArrow"><mat-icon>arrow_downward</mat-icon></button>
     </div>
-    <mat-divider [vertical]="true" class="ml-2 mr-4" *ngIf="editable"></mat-divider>
+    <mat-divider [vertical]="true" class="ml-2 mr-4" *ngIf="editable && !isMobile"></mat-divider>
     <div class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-grow-1 flex-wrap">
         <div class="d-flex flex-column flex-grow-1">
@@ -18,7 +18,7 @@
           <mat-checkbox [(ngModel)]="house.visited" [disabled]="!editable">Visited</mat-checkbox>
           <a [href]="house.link" target="_blank" rel="noopener">HAR Link</a>
         </div>
-          <img [src]="house.image" class="mw-100" style="max-height: 128px;"/>
+          <img [src]="house.image" class="mw-100" [ngStyle]="{'max-height': isMobile ? 'none' : '128px'}"/>
       </div>
       <mat-expansion-panel class="mt-2">
         <mat-expansion-panel-header>

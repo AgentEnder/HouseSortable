@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import * as moment from 'moment';
-import { Subscription, forkJoin, zip } from 'rxjs';
+import { Subscription, forkJoin, zip, combineLatest } from 'rxjs';
 import { xkcdPassphrase } from 'xkcd-passphrase';
 
 import { HouseList, HouseModel } from '../core/models/house-model';
@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { LocalStorageService } from '../core/services/local-storage.service';
 import { HouseListModule } from './house-list.module';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
     templateUrl: './house-list.component.html'
@@ -39,15 +40,20 @@ export class HouseListComponent implements OnInit, OnDestroy {
     user: User;
     loggedIn;
     subscription: Subscription;
+    isMobile: boolean;
 
     constructor(
         private houseListService: HouseListService,
         private auth: AuthService,
         private dialogService: MatDialog,
         private activatedRoute: ActivatedRoute,
-        private storageService: LocalStorageService
+        private storageService: LocalStorageService,
+        private breakpoints: BreakpointObserver
     ) {
-        this.subscription = zip(this.auth.user$, activatedRoute.queryParamMap).pipe(
+        breakpoints.observe(Breakpoints.Handset).subscribe(x => {
+            this.isMobile = x.matches;
+        });
+        this.subscription = combineLatest([this.auth.user$, activatedRoute.queryParamMap]).pipe(
             map(
                 ([user, paramMap]) => ({user, paramMap})
             )
@@ -78,6 +84,7 @@ export class HouseListComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+        this.storageService.setLocalStorage('cachedList', this.houseList);
     }
 
     addModel(): void {
@@ -96,7 +103,9 @@ export class HouseListComponent implements OnInit, OnDestroy {
     }
 
     removeItemInArray(arr, fromIndex): void {
-        arr.splice(fromIndex, 1);
+        if ( confirm('You are about to remove a house! This is not undo-able. Continue?') ) {
+            arr.splice(fromIndex, 1);
+        }
     }
 
     async import(event: InputEvent & { target: { files: FileList } }): Promise<void> {
@@ -132,18 +141,30 @@ export class HouseListComponent implements OnInit, OnDestroy {
     }
 
     save(): void {
-        this.dialogService.open(SaveDialogComponent, {data: this.houseList}).afterClosed().subscribe(x => {
+        if (this.loggedIn) {
+            this.dialogService.open(SaveDialogComponent, {data: this.houseList}).afterClosed().subscribe(x => {
 
-        });
+            });
+        } else {
+            this.auth.googleSignIn().then(
+                () => this.save()
+            );
+        }
     }
 
     load(): void {
-        this.dialogService.open(LoadDialogComponent, {width: '50vw'}).afterClosed().subscribe((x: HouseList) => {
-            if (typeof(x) === 'object' && 'name' in x) {
-                this.houseList = x;
-                this.models = x.data;
-            }
-        });
+        if (this.loggedIn) {
+            this.dialogService.open(LoadDialogComponent, {width: '50vw'}).afterClosed().subscribe((x: HouseList) => {
+                if (typeof(x) === 'object' && 'name' in x) {
+                    this.houseList = x;
+                    this.models = x.data;
+                }
+            });
+        } else {
+            this.auth.googleSignIn().then(
+                () => this.load()
+            );
+        }
     }
 
     deleteCloudSave(): void {
